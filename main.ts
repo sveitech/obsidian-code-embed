@@ -1,4 +1,4 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, MarkdownRenderer } from 'obsidian';
 
 // Remember to rename these classes and interfaces!
 
@@ -16,25 +16,39 @@ export default class CodeEmbed extends Plugin {
 	async onload() {
 		await this.loadSettings();
 
-		this.registerMarkdownCodeBlockProcessor("code", async (source, el, ctx) => {
+		this.registerMarkdownCodeBlockProcessor("codefile", async (source, el, ctx) => {
 			const { vault } = this.app;
-
 			const rows = source.split("\n").filter((row) => row.length > 0);
+			
+			if (rows.length == 0) {
+				return;
+			};
 
-			if (rows.length > 0 ) {
-				const filename = rows[0];
+			const tokens = rows[0].split(":");
+			let filename = ""
+			let language = ""
 
-				const pre = el.createEl("pre");
-				const code = pre.createEl("code");
+			if (tokens.length == 1) {
+				filename = tokens[0];
+			} else if(tokens.length == 2) {
+				language = tokens[0];
+				filename = tokens[1];
+			}
+			
+			const file = vault.getAbstractFileByPath(filename);
 
-				const file = vault.getAbstractFileByPath(filename);
+			if (file != null) {
+				const fileContents = await vault.cachedRead(file);
 
-				if (file != null) {
-					const fileContents = await vault.cachedRead(file);
-					code.innerText = fileContents;
-				} else {
-					new Notice('code-embed: could not read file ' + filename);
-				}
+				let markdown = "```" + language;
+				markdown += "\r\n";
+				markdown += fileContents;
+				markdown += "```";
+
+				MarkdownRenderer.renderMarkdown(markdown, el, "", null);
+				//code.innerText = fileContents;
+			} else {
+				el.innerText = "Could not load file " + filename;
 			}
 		  });
 
