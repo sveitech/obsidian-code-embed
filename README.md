@@ -8,9 +8,9 @@ the Obsidian vault.
 Create a code-block with the tag `codefile` and a single line which is a
 path to the file to be loaded:
 
-  ```codefile
-  path/relative/to/vault/main.cpp
-  ```
+    ```codefile
+    path/relative/to/vault/main.cpp
+    ```
 
 In the reading view, the file will be loaded from disk and rendered as a
 code-block.
