@@ -34,7 +34,10 @@ export default class CodeEmbed extends Plugin {
 				MarkdownRenderer.renderMarkdown(markdown, el, "", null);
 				//code.innerText = fileContents;
 			} else {
-				el.innerText = "Could not load file " + filename;
+				const pre = el.createEl("pre");
+				const code = pre.createEl("code");
+
+				code.innerText = "Could not load file " + filename;
 			}
 		  });
 	}
