@@ -1,7 +1,7 @@
 # Code Embed
 
-Embed an external codefile as a code-block. The codefiles must be located inside
-the Obsidian vault.
+Embed an external codefile as a code-block. The codefiles can be outside
+of the Obsidian vault.
 
 ## Basic Example
 
@@ -10,12 +10,19 @@ path to the file to be loaded:
 
     ```codefile
     path/relative/to/vault/main.cpp
-    ```
+    ```  
+	  
+	or   
+	  	
+    ```codefile  
+    path/on/your/disk/main.cpp  
+    ```	  
+	
 
 In Reading view, the file will be loaded from disk and rendered as a
 code-block.
 
 ## Syntax Highlighting
 
-Auto with the file extension
+Auto with file extension...
 
