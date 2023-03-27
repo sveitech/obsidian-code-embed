@@ -12,14 +12,10 @@ path to the file to be loaded:
     path/relative/to/vault/main.cpp
     ```
 
-In the reading view, the file will be loaded from disk and rendered as a
+In Reading view, the file will be loaded from disk and rendered as a
 code-block.
 
 ## Syntax Highlighting
 
-Prepend the path with a code-language and a `:` to enable language syntax
-highlighting:
+Auto with the file extension
 
-    ```codefile
-    cpp:path/relative/to/vault/main.cpp
-    ```
