@@ -1,44 +1,38 @@
-import { Plugin, MarkdownRenderer } from 'obsidian';
+import { Plugin, MarkdownRenderer, TFile } from "obsidian";
 
 export default class CodeEmbed extends Plugin {
 	async onload() {
-		this.registerMarkdownCodeBlockProcessor("codefile", async (source, el, ctx) => {
-			const { vault } = this.app;
-			const rows = source.split("\n").filter((row) => row.length > 0);
-			
-			if (rows.length == 0) {
-				return;
-			};
+		this.registerMarkdownCodeBlockProcessor(
+			"codefile",
+			async (source, el, ctx) => {
+				const { vault } = this.app;
+				const rows = source.split("\n").filter((row) => row.length > 0);
 
-			const tokens = rows[0].split(":");
-			let filename = ""
-			let language = ""
+				if (rows.length == 0) {
+					return;
+				}
 
-			if (tokens.length == 1) {
-				filename = tokens[0];
-			} else if(tokens.length == 2) {
-				language = tokens[0];
-				filename = tokens[1];
-			}
-			
-			const file = vault.getAbstractFileByPath(filename);
+				const filename = rows[0].trim();
+				let language = filename.split(".").pop()?.trim();
+				const file = vault.getAbstractFileByPath(filename) as TFile;
 
-			if (file != null) {
-				const fileContents = await vault.cachedRead(file);
-
+				const fileContents = file
+					? await vault.cachedRead(file)
+					: "Couldn't find: " + filename;
+				if (!file) language = "blank"; // to stabilize error-block when editing
 				let markdown = "```" + language;
 				markdown += "\r\n";
 				markdown += fileContents;
-				markdown += "```";
 
-				MarkdownRenderer.renderMarkdown(markdown, el, "", null);
-				//code.innerText = fileContents;
-			} else {
-				const pre = el.createEl("pre");
-				const code = pre.createEl("code");
+				if (fileContents.endsWith("\n")) {
+					// if the file doesn't end with \n
+					markdown += "```";
+				} else {
+					markdown += "\n```";
+				}
 
-				code.innerText = "Could not load file " + filename;
+				MarkdownRenderer.renderMarkdown(markdown, el, "", this);
 			}
-		  });
+		);
 	}
 }
