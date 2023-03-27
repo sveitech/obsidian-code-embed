@@ -26,4 +26,4 @@ code-block.
 
 Auto with file extension...
 
-![demo](https://youtu.be/cDhnNdyxSjE)
+[demo](https://youtu.be/cDhnNdyxSjE)
