@@ -25,7 +25,6 @@ export default class CodeEmbed extends Plugin {
 					if (fileContents) fileExt = "ext"
 				}
 				if (!fileContents) {
-					console.log("not fileContents");
 					fileContents = file
 						? await vault.cachedRead(file)
 						: "Couldn't find: " + filename;
@@ -50,7 +49,7 @@ export default class CodeEmbed extends Plugin {
 		try {
 			return await fs.readFile(filename, "utf8");
 		} catch (err) {
-			console.error(err);
+			// console.error(err);
 			return "";
 		}
 	}
